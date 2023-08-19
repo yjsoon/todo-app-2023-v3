@@ -39,6 +39,7 @@ class TodoManager: ObservableObject {
     
     func load() {
         let archiveURL = getArchiveURL()
+        print(archiveURL)
         let propertyListDecoder = PropertyListDecoder()
                 
         if let retrievedTodoData = try? Data(contentsOf: archiveURL),
