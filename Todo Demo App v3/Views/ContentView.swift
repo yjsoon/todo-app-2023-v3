@@ -39,6 +39,15 @@ struct ContentView: View {
                         }
                     }
                 }
+//                .swipeActions {
+//                    Button {
+//                        print("Hello world")
+//                    } label: {
+//                        Label("Circle", systemImage: "circle")
+//                    }
+//                    .tint(.orange)
+//
+//                }
             }
             .navigationTitle("Todos")
             .toolbar {
