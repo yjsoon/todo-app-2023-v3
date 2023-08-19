@@ -8,14 +8,34 @@
 import SwiftUI
 
 struct ContentView: View {
+    
+    @State private var todos = [
+        Todo(title: "Get up", isDone: true),
+        Todo(title: "Eat breakfast", subtitle: "McGriddles Stack"),
+        Todo(title: "Brush teeth"),
+        Todo(title: "Go to school")
+    ]
+    
     var body: some View {
-        VStack {
-            Image(systemName: "globe")
-                .imageScale(.large)
-                .foregroundColor(.accentColor)
-            Text("Hello, world!")
+        NavigationStack {
+            List($todos) { $todo in
+                HStack {
+                    Image(systemName: todo.isDone ? "checkmark.circle.fill" : "circle")
+                        .onTapGesture {
+                            todo.isDone.toggle()
+                        }
+                    VStack(alignment: .leading) {
+                        Text(todo.title)
+                            .strikethrough(todo.isDone)
+                        if !todo.subtitle.isEmpty {
+                            Text(todo.subtitle)
+                                .font(.caption)
+                        }
+                    }
+                }
+            }
+            .navigationTitle("Todos")
         }
-        .padding()
     }
 }
 
