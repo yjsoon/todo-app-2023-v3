@@ -10,75 +10,17 @@ import SwiftUI
 struct ContentView: View {
     
     @StateObject var todoManager = TodoManager()
-    @State private var showAddSheet = false
-    @State private var showLoadSampleAlert = false
     
     var body: some View {
-        NavigationStack {
-            List($todoManager.todos, editActions: .all) { $todo in
-                NavigationLink {
-                    TodoDetailView(todo: $todo)
-                } label: {
-                    HStack {
-                        Image(systemName: todo.isDone ? "checkmark.circle.fill" : "circle")
-                            .onTapGesture {
-                                todo.isDone.toggle()
-                            }
-                        VStack(alignment: .leading) {
-                            Text(todo.title)
-                                .strikethrough(todo.isDone)
-                            if !todo.subtitle.isEmpty {
-                                Text(todo.subtitle)
-                                    .font(.caption)
-                            }
-                        }
-                    }
+        TabView {
+            MainTodoListView(todoManager: todoManager)
+                .tabItem {
+                    Label("Todos", systemImage: "checkmark.circle.fill")
                 }
-//                .swipeActions {
-//                    Button {
-//                        print("Hello world")
-//                    } label: {
-//                        Label("Circle", systemImage: "circle")
-//                    }
-//                    .tint(.orange)
-//
-//                }
-            }
-            .navigationTitle("Todos")
-            .toolbar {
-                
-                ToolbarItemGroup {
-                   
-                    #if DEBUG
-                    Button {
-                        showLoadSampleAlert = true
-                    } label: {
-                        Label("Load sample data", systemImage: "clipboard")
-                    }
-                    #endif
-
-                    Button {
-                        showAddSheet = true
-                    } label: {
-                        Label("Add todo", systemImage: "plus")
-                    }
-                    
+            HowManyMoreView(todoManager: todoManager)
+                .tabItem {
+                    Label("Progress", systemImage: "number.circle.fill")
                 }
-                
-                
-                ToolbarItem(placement: .navigationBarLeading) {
-                    EditButton()
-                }
-            }
-            .sheet(isPresented: $showAddSheet) {
-                AddTodoView(todos: $todoManager.todos)
-                    .presentationDetents([.medium])
-            }
-            .alert("Load sample data? Warning: Cannot undo!", isPresented: $showLoadSampleAlert) {
-                Button("Replace", role: .destructive) {
-                    todoManager.loadSampleTodos()
-                }
-            }
         }
     }
 }
