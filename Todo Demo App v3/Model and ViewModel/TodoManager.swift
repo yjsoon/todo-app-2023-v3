@@ -19,6 +19,10 @@ class TodoManager: ObservableObject {
         load()
     }
     
+    func loadSampleTodos() {
+        todos = Todo.sampleTodos
+    }
+    
     func getArchiveURL() -> URL {
         let plistName = "todos.plist"
         let documentsDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!

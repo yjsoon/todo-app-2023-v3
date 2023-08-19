@@ -11,6 +11,7 @@ struct ContentView: View {
     
     @StateObject var todoManager = TodoManager()
     @State private var showAddSheet = false
+    @State private var showLoadSampleAlert = false
     
     var body: some View {
         NavigationStack {
@@ -45,13 +46,25 @@ struct ContentView: View {
             }
             .navigationTitle("Todos")
             .toolbar {
-                ToolbarItem {
+                
+                ToolbarItemGroup {
+                   
+                    #if DEBUG
+                    Button {
+                        showLoadSampleAlert = true
+                    } label: {
+                        Label("Load sample data", systemImage: "clipboard")
+                    }
+                    #endif
+
                     Button {
                         showAddSheet = true
                     } label: {
-                        Image(systemName: "plus")
+                        Label("Add todo", systemImage: "plus")
                     }
+                    
                 }
+                
                 
                 ToolbarItem(placement: .navigationBarLeading) {
                     EditButton()
@@ -60,6 +73,11 @@ struct ContentView: View {
             .sheet(isPresented: $showAddSheet) {
                 AddTodoView(todos: $todoManager.todos)
                     .presentationDetents([.medium])
+            }
+            .alert("Load sample data? Warning: Cannot undo!", isPresented: $showLoadSampleAlert) {
+                Button("Replace", role: .destructive) {
+                    todoManager.loadSampleTodos()
+                }
             }
         }
     }
